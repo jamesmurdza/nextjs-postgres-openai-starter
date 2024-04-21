@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default async function SettingsPage() {
+export default function SettingsPage() {
   const [prompt, setPrompt] = useState('');
   const [imageUrl, setImageUrl] = useState(null);
 
