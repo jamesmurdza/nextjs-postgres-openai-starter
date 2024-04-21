@@ -13,7 +13,7 @@ export async function generateImageWithOpenAI(prompt) {
     body: JSON.stringify({
       prompt: prompt,
       n: 1, // Number of images to generate
-      size: '1024x1024', // The size of the generated images
+      size: '256x256', // The size of the generated images
     }),
   });
 
