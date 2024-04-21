@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from 'react';
 
 export default function SettingsPage() {
@@ -5,7 +7,7 @@ export default function SettingsPage() {
   const [imageUrl, setImageUrl] = useState(null);
 
   const handleGenerateImage = async () => {
-    const response = await fetch('/api/auth/[...nextauth]/generate-image', {
+    const response = await fetch('/api/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
