@@ -1,12 +1,11 @@
-import { generateImage } from '@/lib/imageGenerator';
+import { generateImageWithOpenAI } from '@/lib/openaiImageGenerator';
 
 export { GET, POST } from '@/lib/auth';
 
 export async function POST(req, res) {
   try {
-    const imageBuffer = await generateImage(req.body);
-    res.setHeader('Content-Type', 'image/png');
-    res.send(imageBuffer);
+    const imageUrl = await generateImageWithOpenAI(req.body.prompt);
+    res.json({ imageUrl });
   } catch (error) {
     res.status(500).json({ error: 'Image generation failed' });
   }
