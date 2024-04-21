@@ -38,13 +38,13 @@ export default function RootLayout({
                     <UsersIcon className="h-4 w-4" />
                     Users
                   </NavItem>
-                  <NavItem href="/settings">
+                  <NavItem href="/generate">
                     <SettingsIcon className="h-4 w-4" />
-                    Settings
+                    Image Generation
                   </NavItem>
-                  <NavItem href="https://vercel.com/templates/next.js/admin-dashboard-tailwind-postgres-react-nextjs">
-                    <VercelLogo className="h-4 w-4" />
-                    Deploy
+                  <NavItem href="/analyze">
+                    <SettingsIcon className="h-4 w-4" />
+                    Image Analysis
                   </NavItem>
                 </nav>
               </div>
