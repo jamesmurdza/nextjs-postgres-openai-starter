@@ -10,12 +10,14 @@ import { useImageGenerator } from '@/hooks/useImageGenerator';
 
 export default function SettingsPage() {
   const [prompt, setPrompt] = useState('');
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const { loading, handleGenerateImage } = useImageGenerator();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleGenerateImage(prompt, setImageUrl);
+    handleGenerateImage(prompt, (imageUrl) => {
+      setImageUrls([...imageUrls, imageUrl]);
+    });
   };
 
   return (
@@ -35,22 +37,24 @@ export default function SettingsPage() {
           Generate
         </Button>
       </form>
-      <div className="w-full mb-4 text-center relative">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {imageUrls.map((url, index) => (
+          <div key={index} className="w-full mb-4 text-center relative">
+            <img
+              src={url}
+              alt={`Generated ${index + 1}`}
+              className="border rounded-sm border-input"
+            />
+          </div>
+        ))}
         {loading && (
-          <div className="border border-input rounded-sm w-64 h-64 relative">
-            {/* Spinner */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <Spinner />
+          <div className="w-full mb-4 text-center relative">
+            <div className="border border-input rounded-sm w-64 h-64 relative">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <Spinner />
+              </div>
             </div>
           </div>
-        )}
-        {/* Show image when loaded and not loading */}
-        {imageUrl && !loading && (
-          <img
-            src={imageUrl}
-            alt="Generated"
-            className="border rounded-sm border-input"
-          />
         )}
       </div>
     </main>
