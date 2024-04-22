@@ -27,9 +27,8 @@ export default function SettingsPage() {
       reader.readAsDataURL(image);
       reader.onload = () => {
         if (reader.result && typeof reader.result === 'string') {
-        const base64Image = reader.result.split(',')[1];
-        generateText(base64Image, (output) => {
-          setGeneratedText(output.generatedText);
+        generateText(reader.result, ({ generatedText }) => {
+          setGeneratedText(generatedText);
         });
       }
       };

@@ -54,7 +54,7 @@ export async function generateText({ prompt, image }: { prompt: string; image?: 
   ];
 
   if (image) {
-    messages[0].content = [{ type: 'image_url', image_url: { url: `data:image/png;base64,${image}` } }];
+    messages[0].content = [{ type: 'image_url', image_url: { url: image } }];
   }
 
   const payload = {
