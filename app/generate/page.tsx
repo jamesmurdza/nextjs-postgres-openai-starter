@@ -6,17 +6,17 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
-import { useGenerateImage } from '@/hooks/useGenerateImage';
+import { useImageGeneration } from '@/hooks/useGeneration';
 
 export default function SettingsPage() {
   const [prompt, setPrompt] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const { loading, handleGenerateImage } = useGenerateImage();
+  const { loading, generateImage } = useImageGeneration();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleGenerateImage(prompt, (imageUrl) => {
-      setImageUrls([...imageUrls, imageUrl]);
+    generateImage(prompt, (output) => {
+      setImageUrls([...imageUrls, output.imageUrl]);
     });
   };
 

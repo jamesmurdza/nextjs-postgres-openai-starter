@@ -2,21 +2,22 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { useGenerateText } from '@/hooks/useGenerateText';
+import { useTextGeneration } from '@/hooks/useGeneration';
 import React from 'react';
 
 import { Input } from '@/components/ui/input';
 
 export default function SettingsPage() {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<File | null>(null);
   const [generatedText, setGeneratedText] = useState('');
-  const { loading, generateText } = useGenerateText();
+  const { loading, generateText } = useTextGeneration();
 
-  const handleImageUpload = (event) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     event.stopPropagation();
     if (event.target.files && event.target.files.length) {
       setImage(event.target.files[0]);
+      setGeneratedText("");
     }
   };
 
@@ -25,10 +26,12 @@ export default function SettingsPage() {
       const reader = new FileReader();
       reader.readAsDataURL(image);
       reader.onload = () => {
+        if (reader.result && typeof reader.result === 'string') {
         const base64Image = reader.result.split(',')[1];
-        generateText(base64Image, (text) => {
-          setGeneratedText(text);
+        generateText(base64Image, (output) => {
+          setGeneratedText(output.generatedText);
         });
+      }
       };
     }
   };
@@ -50,26 +53,21 @@ export default function SettingsPage() {
           Generate
         </Button>
         </div>
-        <div>
-        {image && (
-      <img
-      src={URL.createObjectURL(image)}
-      alt="Uploaded image"
-      className="max-w-64"
-    />
-
-      )}
-        </div>
-      </div>
-      {loading ? (
+        <div className="flex gap-6">
+        {image && (<img
+          src={URL.createObjectURL(image)}
+          alt="Uploaded image"
+          className="max-w-64"
+        />)}
+        {loading ? (
         <div className="w-full mb-4 text-center relative">
-          <div className="border border-input rounded-sm w-64 h-20 relative">
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <Spinner />
             </div>
-          </div>
         </div>
       ) : generatedText && <p className="mt-4">{generatedText}</p>}
+        </div>
+      </div>
     </main>
   );
 }
