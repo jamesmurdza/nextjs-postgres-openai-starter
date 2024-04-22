@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { generateImageWithOpenAI } from '@/lib/openaiImageGenerator';
+import { generateImage } from '@/lib/openai';
 
 export async function POST(req: Request){
   const body = await req.json();
   const { prompt } = body;
-  const imageUrl: string = await generateImageWithOpenAI(prompt);
+  const imageUrl: string = await generateImage(prompt);
   return NextResponse.json({ imageUrl })
 }

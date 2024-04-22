@@ -38,11 +38,11 @@ export default function RootLayout({
                     <UsersIcon className="h-4 w-4" />
                     Users
                   </NavItem>
-                  <NavItem href="/settings">
+                  <NavItem href="/generate">
                     <SettingsIcon className="h-4 w-4" />
                     Image Generation
                   </NavItem>
-                  <NavItem href="/settings2">
+                  <NavItem href="/analyze">
                     <SettingsIcon className="h-4 w-4" />
                     Image Analysis
                   </NavItem>

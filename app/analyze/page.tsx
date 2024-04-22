@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { useTextGenerator } from '@/hooks/useTextGenerator';
+import { useGenerateText } from '@/hooks/useGenerateText';
 import React from 'react';
 
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 export default function SettingsPage() {
   const [image, setImage] = useState(null);
   const [generatedText, setGeneratedText] = useState('');
-  const { loading, generateText } = useTextGenerator();
+  const { loading, generateText } = useGenerateText();
 
   const handleImageUpload = (event) => {
     event.preventDefault();
@@ -36,7 +36,7 @@ export default function SettingsPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="flex items-center">
-        <h1 className="font-semibold text-lg md:text-2xl">Settings</h1>
+        <h1 className="font-semibold text-lg md:text-2xl">Analyze Image</h1>
       </div>
       <div>
         <div className="w-full flex items-center mb-5">

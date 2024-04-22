@@ -6,12 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
-import { useImageGenerator } from '@/hooks/useImageGenerator';
+import { useGenerateImage } from '@/hooks/useGenerateImage';
 
 export default function SettingsPage() {
   const [prompt, setPrompt] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const { loading, handleGenerateImage } = useImageGenerator();
+  const { loading, handleGenerateImage } = useGenerateImage();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ export default function SettingsPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="flex items-center">
-        <h1 className="font-semibold text-lg md:text-2xl">Settings</h1>
+        <h1 className="font-semibold text-lg md:text-2xl">Generate Images</h1>
       </div>
       <form onSubmit={handleSubmit} className="w-full flex items-center">
         <Input

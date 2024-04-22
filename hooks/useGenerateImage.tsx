@@ -5,12 +5,12 @@ interface ImageGeneratorHook {
   handleGenerateImage: (prompt: string, setImageUrl: (url: string) => void) => Promise<void>;
 }
 
-export function useImageGenerator(): ImageGeneratorHook {
+export function useGenerateImage(): ImageGeneratorHook {
   const [loading, setLoading] = useState(false);
   
   const handleGenerateImage = async (prompt: string, setImageUrl: (url: string) => void): Promise<void> => {
-    setLoading(true); // Set loading to true when starting image generation
-    const response = await fetch('/api/generate', {
+    setLoading(true);
+    const response = await fetch('/api/generate/image', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ export function useImageGenerator(): ImageGeneratorHook {
     });
     const data = await response.json();
     setImageUrl(data.imageUrl);
-    setLoading(false); // Set loading to false when image is loaded
+    setLoading(false);
   };
   
   return { loading, handleGenerateImage };
