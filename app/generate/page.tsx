@@ -13,10 +13,10 @@ export default function SettingsPage() {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const { loading, generateImage } = useImageGeneration();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    generateImage(prompt, (output) => {
-      setImageUrls([...imageUrls, output.imageUrl]);
+    generateImage(prompt, ({ imageUrl }) => {
+      setImageUrls([...imageUrls, imageUrl]);
     });
   };
 
