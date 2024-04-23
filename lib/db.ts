@@ -5,7 +5,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { pgTable, serial, varchar } from 'drizzle-orm/pg-core';
 import { eq, ilike } from 'drizzle-orm';
 
-export const db = drizzle(
+export const db = process.env.POSTGRES_URL && drizzle(
   neon(process.env.POSTGRES_URL!, {
     fetchOptions: {
       cache: 'no-store'
