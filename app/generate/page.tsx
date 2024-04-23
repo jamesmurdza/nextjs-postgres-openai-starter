@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 
@@ -8,23 +8,32 @@ import { Spinner } from '@/components/ui/spinner';
 
 import { useImageGeneration } from '@/hooks/useGeneration';
 
+// React component for the Settings page
 export default function SettingsPage() {
+  // State variables for prompt and image URLs
   const [prompt, setPrompt] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  // Custom hook to handle image generation
   const { loading, generateImage } = useImageGeneration();
 
+  // Function to handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Generate image based on prompt
     generateImage(prompt, ({ imageUrl }) => {
+      // Add new image to the grid
       setImageUrls([...imageUrls, imageUrl]);
     });
   };
 
+  // JSX rendering
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="flex items-center">
         <h1 className="font-semibold text-lg md:text-2xl">Generate Images</h1>
       </div>
+      {/* Form for entering prompt and submitting */}
       <form onSubmit={handleSubmit} className="w-full flex items-center">
         <Input
           type="text"
@@ -33,11 +42,18 @@ export default function SettingsPage() {
           placeholder="Enter an image prompt"
           className="px-4 py-2 border rounded-md flex-grow"
         />
-        <Button type="submit" className="ml-3 py-2 bg-blue-500 text-white rounded-md" disabled={loading}>
+        {/* Button to trigger image generation */}
+        <Button
+          type="submit"
+          className="ml-3 py-2 bg-blue-500 text-white rounded-md"
+          disabled={loading}
+        >
           Generate
         </Button>
       </form>
+      {/* Grid to display generated images */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Map over image URLs and display images */}
         {imageUrls.map((url, index) => (
           <div key={index} className="w-full mb-4 text-center relative">
             <img
@@ -47,6 +63,7 @@ export default function SettingsPage() {
             />
           </div>
         ))}
+        {/* Display loading spinner while generating images */}
         {loading && (
           <div className="w-full mb-4 text-center relative">
             <div className="border border-input rounded-sm w-64 h-64 relative">
