@@ -55,10 +55,10 @@ export default function AnalyzeImagePage() {
           <Button
             type="button"
             className="ml-3 py-2 bg-blue-500 text-white rounded-md"
-            disabled={loading}
+            disabled={loading || image === null}
             onClick={handleSubmit}
           >
-            Generate
+            Analyze
           </Button>
         </div>
         <div className="flex gap-6">

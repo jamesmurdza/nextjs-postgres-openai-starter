@@ -45,7 +45,7 @@ export default function SettingsPage() {
         <Button
           type="submit"
           className="ml-3 py-2 bg-blue-500 text-white rounded-md"
-          disabled={loading}
+          disabled={loading || prompt === ''}
         >
           Generate
         </Button>
