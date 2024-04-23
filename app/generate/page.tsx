@@ -6,25 +6,24 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
-import { useImageGeneration } from '@/hooks/useGeneration';
+import { useLoading } from '@/hooks/useLoading';
+
+import { generateImage as generateImageSimple } from '@/lib/api';
 
 // React component for the Settings page
 export default function SettingsPage() {
   // State variables for prompt and image URLs
   const [prompt, setPrompt] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-
-  // Custom hook to handle image generation
-  const { loading, generateImage } = useImageGeneration();
+  const [generateImage, loading] = useLoading(generateImageSimple);
 
   // Function to handle form submission
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Generate image based on prompt
-    generateImage(prompt, ({ imageUrl }) => {
-      // Add new image to the grid
-      setImageUrls([...imageUrls, imageUrl]);
-    });
+    const imageUrl = await generateImage(prompt);
+    // Add new image to the grid
+    setImageUrls([...imageUrls, imageUrl]);
   };
 
   // JSX rendering

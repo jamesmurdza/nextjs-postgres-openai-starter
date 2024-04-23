@@ -1,19 +1,21 @@
 'use client';
+
+import React from 'react';
 import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { useTextGeneration } from '@/hooks/useGeneration';
-import React from 'react';
-
 import { Input } from '@/components/ui/input';
+
+import { useLoading } from '@/hooks/useLoading';
+
+import { generateText as generateTextSimple } from '@/lib/api';
 
 export default function AnalyzeImagePage() {
   // State variables for image and generated text
   const [image, setImage] = useState<File | null>(null);
+  const [generateText, loading] = useLoading(generateTextSimple);
   const [generatedText, setGeneratedText] = useState('');
-
-  // Custom hook to handle text generation
-  const { loading, generateText } = useTextGeneration();
 
   // Function to handle image upload
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,15 +28,15 @@ export default function AnalyzeImagePage() {
   };
 
   // Function to handle form submission
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (image) {
       const reader = new FileReader();
       reader.readAsDataURL(image);
-      reader.onload = () => {
+      reader.onload = async () => {
         if (reader.result && typeof reader.result === 'string') {
-          generateText(reader.result, ({ generatedText }) => {
-            setGeneratedText(generatedText);
-          });
+          setGeneratedText(
+            await generateText(reader.result)
+          );
         }
       };
     }
