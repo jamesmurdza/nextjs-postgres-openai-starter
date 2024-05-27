@@ -49,7 +49,12 @@ export async function generateText({ prompt, image }: { prompt: string; image?: 
   const messages: UserMessage[] = [
     {
       role: 'user',
-      content: [{ type: 'text', text: prompt }],
+      content: image ? [
+        { type: 'image_url', image_url: { url: image } },
+        { type: 'text', text: prompt }
+      ] : [
+        { type: 'text', text: prompt }
+      ],
     },
   ];
 

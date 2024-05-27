@@ -29,6 +29,9 @@ export async function getUsers(
   users: SelectUser[];
   newOffset: number | null;
 }> {
+  if (!db) {
+    throw new Error("Database not initialized");
+  }
   // Always search the full table, not per page
   if (search) {
     return {
@@ -51,5 +54,8 @@ export async function getUsers(
 }
 
 export async function deleteUserById(id: number) {
+  if (!db) {
+    throw new Error("Database not initialized");
+  }
   await db.delete(users).where(eq(users.id, id));
 }
