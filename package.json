@@ -4,7 +4,8 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "setup": "npx ts-node setup/index.js"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.0",

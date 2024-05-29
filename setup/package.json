@@ -1,0 +1,10 @@
+{
+    "type": "module",
+    "dependencies": {
+        "ansi-escapes": "^7.0.0",
+        "inquirer": "^9.2.22",
+        "keypress": "^0.2.1",
+        "listr": "^0.14.3",
+        "readline": "^1.3.0"
+    }
+}
