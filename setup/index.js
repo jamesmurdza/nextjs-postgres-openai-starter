@@ -2,6 +2,15 @@ import inquirer from 'inquirer';
 import fs from 'fs/promises';
 import path from 'path';
 
+import { marked } from 'marked';
+import TerminalRenderer from 'marked-terminal';
+
+marked.setOptions({
+  renderer: new TerminalRenderer()
+});
+
+const md = (text) => marked(text).replace(/\n{1,2}$/, '');
+
 const envFilePath = path.join(process.cwd(), '.env');
 
 async function main() {
@@ -12,26 +21,33 @@ async function main() {
       .catch(() => '');
 
     // Get the keys of variables that already exist
-    const existingVars = ['PRODUCTION_URL', 'AUTH_METHODS', 'OPENAI_API_KEY'];
+    const existingVars = [
+      'POSTGRES_URL',
+      'AUTH_GITHUB_ID',
+      'AUTH_GITHUB_SECRET',
+      'AUTH_SECRET',
+      'OPENAI_API_KEY'
+    ];
 
     // Print the variables that already exist and are in the list of variables to write
     const existingVarsToWrite = existingVars.filter((key) =>
       envFileContent.includes(key)
     );
     if (existingVarsToWrite.length > 0) {
-      console.log('The following variables already exist in .env:');
+      console.log(md('**The following variables already exist in .env:**'));
       console.log(existingVarsToWrite.map((key) => `- ${key}`).join('\n'));
       console.log(
-        'Variables assigned a non-empty value will be overwritten.\n'
+        md('**Variables assigned a non-empty value will be overwritten.**') +
+          '\n'
       );
     }
 
     // Step 1: Ask the user for the production URL
-    const { productionUrl } = await inquirer.prompt([
+    const { databaseUrl } = await inquirer.prompt([
       {
         type: 'input',
-        name: 'productionUrl',
-        message: 'What is your production URL?'
+        name: 'databaseUrl',
+        message: 'What is your Postgres database URL?'
       }
     ]);
 
@@ -41,16 +57,60 @@ async function main() {
         type: 'checkbox',
         name: 'authMethods',
         message: 'Select the authentication methods needed:',
-        choices: [
-          { name: 'Username/password', value: 0 },
-          { name: 'Google', value: 1 },
-          { name: 'Twitter', value: 2 },
-          { name: 'GitHub', value: 3 }
-        ]
+        choices: [{ name: 'GitHub', value: 1 }]
       }
     ]);
 
-    console.log("https://platform.openai.com/api-keys")
+    let githubAuthId = '';
+    let githubAuthSecret = '';
+    let authSecret = '';
+    if (authMethods.length) {
+      console.log(
+        md(
+          'You can generate the following value here: _https://generate-secret.vercel.app/32_'
+        )
+      );
+      // Step 3: Ask the user for the OPENAI_API_KEY
+      authSecret = (
+        await inquirer.prompt([
+          {
+            type: 'input',
+            name: 'authSecret',
+            message: 'What is your auth secret?'
+          }
+        ])
+      ).authSecret;
+      console.log(
+        md(
+          'You can find the following values in your GitHub settings here: _https://github.com/settings/developers_'
+        )
+      );
+      // Step 3: Ask the user for the OPENAI_API_KEY
+      githubAuthId = (
+        await inquirer.prompt([
+          {
+            type: 'input',
+            name: 'githubAuthToken',
+            message: 'What is your GitHub client ID?'
+          }
+        ])
+      ).githubAuthToken;
+      githubAuthSecret = (
+        await inquirer.prompt([
+          {
+            type: 'input',
+            name: 'githubAuthSecret',
+            message: 'What is your GitHub client secret?'
+          }
+        ])
+      ).githubAuthSecret;
+    }
+
+    console.log(
+      md(
+        'You can generate OpenAI API keys here: _https://platform.openai.com/api-keys_'
+      )
+    );
     // Step 3: Ask the user for the OPENAI_API_KEY
     const { openaiApiKey } = await inquirer.prompt([
       {
@@ -61,8 +121,10 @@ async function main() {
     ]);
 
     const envVars = {
-      PRODUCTION_URL: productionUrl,
-      AUTH_METHODS: authMethods.join(','),
+      POSTGRES_URL: databaseUrl,
+      AUTH_GITHUB_ID: githubAuthId,
+      AUTH_GITHUB_Secret: githubAuthSecret,
+      AUTH_SECRET: authSecret,
       OPENAI_API_KEY: openaiApiKey
     };
 
@@ -95,7 +157,7 @@ async function main() {
         console.log('Variables not written to .env file.');
       }
     } else {
-      console.log('All variables already exist in .env file.');
+      console.log('No variables were updated.');
     }
   } catch (error) {
     console.error('An error occurred:', error);
